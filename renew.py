@@ -12,12 +12,14 @@ CLIENT_SECRET = os.getenv('CLIENT_SECRET')
 
 AUTHORITY = f"https://login.microsoftonline.com/{TENANT_ID}"
 SCOPE = ["https://graph.microsoft.com/.default"]
+# Updated list of endpoints that work with Application permissions
 GRAPH_API_ENDPOINTS = [
-    "https://graph.microsoft.com/v1.0/me",
-    "https://graph.microsoft.com/v1.0/me/drive/root/children",
-    "https://graph.microsoft.com/v1.0/me/mailFolders/inbox/messages",
+    # Get a list of users in the organization
+    "https://graph.microsoft.com/v1.0/users",
+    # Get the root SharePoint site
     "https://graph.microsoft.com/v1.0/sites/root",
-    "https://graph.microsoft.com/v1.0/me/calendars"
+    # Get a list of applications in the organization
+    "https://graph.microsoft.com/v1.0/applications"
 ]
 
 def get_access_token():
@@ -32,7 +34,7 @@ def get_access_token():
     if not result:
         print("No suitable token in cache, getting a new one from AAD.")
         result = app.acquire_token_for_client(scopes=SCOPE)
-
+    
     if "access_token" in result:
         print("Access token acquired successfully.")
         return result['access_token']
